@@ -1,26 +1,19 @@
-class signalfx_collectd(
+class send_metrics(
 
-        $api_token = $signalfx_collectd::params::api_token
+        $api_token = "YOUR-API-TOKEN",
+	$dimension_list = {},
+	$set_aws_instanceId = false
 
-) inherits signalfx_collectd::params  {
-
-
-	class { '::collectd':}
-
-        $URL_BASE = 'https://ingest.signalfx.com/v1/collectd'
+) {
+	include 'collectd'
         
-        $DIMENSIONS = get_dimensions($signalfx_collectd::params::dimension_list)
+	$URL_BASE = 'https://ingest.signalfx.com/v1/collectd'
+        
+        $DIMENSIONS = get_dimensions($dimension_list, $set_aws_instanceId)
         
         $URL = "${URL_BASE}${DIMENSIONS}"
-	
-	notify {"The new URL is ${URL}":}
 
-	# collectd::plugin { ['cpu', 'cpufreq', 'df', 'disk', 'interface', 'load', 'memory', 'network', 'uptime']: }
-	
-	class { 'collectd::plugin::logfile':
-            log_level => 'info',
-            log_file => '/var/log/signalfx-collectd.log',
-        }
+	notify {"The new URL is ${URL}":}
 
         class { 'collectd::plugin::write_http':
             urls => {
