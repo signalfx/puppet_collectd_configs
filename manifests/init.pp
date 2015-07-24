@@ -1,17 +1,15 @@
 class send_metrics(
 
-        $api_token = "YOUR-API-TOKEN",
+        $api_token = "", # (required parameter)
 	$dimension_list = {},
-	$set_aws_instanceId = false
-
+	$set_aws_instanceId = false,
+	$signalfx_url = "https://ingest.signalfx.com/v1/collectd"
 ) {
 	include 'collectd'
         
-	$URL_BASE = 'https://ingest.signalfx.com/v1/collectd'
-        
         $DIMENSIONS = get_dimensions($dimension_list, $set_aws_instanceId)
         
-        $URL = "${URL_BASE}${DIMENSIONS}"
+        $URL = "${signalfx_url}${DIMENSIONS}"
 
 	notify {"The new URL is ${URL}":}
 
