@@ -1,4 +1,4 @@
-class send_metrics(
+class send_collectd_metrics(
 
         $api_token = "", # (required parameter)
 	$dimension_list = {},

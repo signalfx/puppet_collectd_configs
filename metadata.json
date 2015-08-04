@@ -1,15 +1,36 @@
 {
+  "name": "signalfx-send_collectd_metrics",
+  "version": "0.1.0",
   "author": "Uday Sagar Shiramshetty",
+  "license": "Apache 2.0",
+  "summary": "A puppet module that configures write_http plugin of collectd to send the system metrics to SignalFx",
+  "source": "https://github.com/signalfx/puppet_send_metrics",
+  "project_page": "https://github.com/signalfx/puppet_send_metrics",
+  "issues_url": "https://github.com/signalfx/puppet_send_metrics/issues",
   "dependencies": [
-    {"name": "pdxcat/collectd"},
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"},
-    {"name":"puppetlabs/concat","version_requirement":">= 1.0.4"}
+    {
+      "name": "pdxcat/collectd",
+      "version_requirement": ">= 4.0.0"
+    },
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.4"
+    }
   ],
-  "license": "",
-  "name": "signalfx-send_metrics",
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2015.03",
+        "2014.09"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "5",
         "6",
@@ -21,14 +42,12 @@
       "operatingsystemrelease": [
         "12.04",
         "14.04",
-        "14.10",
         "15.04"
       ]
     }
   ],
-  "project_page": "https://github.com/signalfx/puppet_install_collectd",
   "requirements": [
-  	{
+    {
       "name": "pe",
       "version_requirement": ">= 3.2.0"
     },
@@ -36,8 +55,5 @@
       "name": "puppet",
       "version_requirement": ">= 3.2.0"
     }
-  ],
-  "source": "https://github.com/signalfx/puppet_install_collectd",
-  "summary": "Installs collectd from SignalFx repositories",
-  "version": "0.1.0"
+  ]
 }
