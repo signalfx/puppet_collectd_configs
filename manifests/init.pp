@@ -7,15 +7,15 @@ class send_collectd_metrics(
 ) {
 	include 'collectd'
         
-        $DIMENSIONS = get_dimensions($dimension_list, $set_aws_instanceId)
+        $dimensions = get_dimensions($dimension_list, $set_aws_instanceId)
         
-        $URL = "${signalfx_url}${DIMENSIONS}"
+        $url = "${signalfx_url}${dimensions}"
 
-	notify {"The new URL is ${URL}":}
+	notify {"Collectd will transmit metrics to this url: ${url}":}
 
         class { 'collectd::plugin::write_http':
             urls => {
-               "${URL}"  => { 'user' => "auth", 'password' => $api_token, 'format' => 'JSON' },
+               "${url}"  => { 'user' => "auth", 'password' => $api_token, 'format' => 'JSON' },
             },
             notify => Service['collectd'],
         }
