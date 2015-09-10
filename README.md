@@ -31,7 +31,7 @@ The send_collectd_metrics module accepts few parameters to configure the write_h
 class {'send_collectd_metrics':
     api_token => "<YOUR-API-TOKEN>",
     dimension_list => {"key" => "value"},
-    set_aws_instanceRegion => false,
+    aws_integration => false,
     signalfx_url => "https://ingest.signalfx.com/v1/collectd"
 }
 ```
@@ -39,7 +39,7 @@ class {'send_collectd_metrics':
  * You can set custom dimensions on all of the metrics being sent by the collectd to SignalFx. This can be done by entering your custom dimensions into the dimension_list hash map.  
    For example: If one of your servers is running kafka, you can attach a custom dimension into the hash map as:  
    dimension_list => {"serverType" => "kafka"}
- * You can attach AWS instance metadata (this module pulls it automatically) by setting the set_aws_instanceRegion as true
+ * You can attach AWS instance metadata (this module pulls it automatically) by setting aws_integration to true
  * You can also configure the target url if you choose to use a proxy to send metrics to SignalFx.
 
 
