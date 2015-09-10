@@ -4,7 +4,7 @@ aws_integration = args[1]
 DIMENSIONS = "?"
 if aws_integration
         puts "Getting AWS metadata..."
-        uri = URI.parse("http://169.254.169.254/latest/dynamic/instance-identity/document")
+        uri = URI.parse("http://169.254.169.254/2014-11-05/dynamic/instance-identity/document")
         http = Net::HTTP.new(uri.host, uri.port)
         http.open_timeout = 4
         http.read_timeout = 4
