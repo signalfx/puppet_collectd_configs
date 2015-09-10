@@ -5,7 +5,7 @@ class send_collectd_metrics (
 
   $api_token                 = '', # (required parameter)
   $dimension_list            = {},
-  $set_aws_instanceId        = false,
+  $set_aws_instanceRegion    = false,
   $signalfx_url              = 'https://ingest.signalfx.com/v1/collectd'
 ) {
   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
@@ -14,7 +14,7 @@ class send_collectd_metrics (
   
   include 'collectd'
         
-        $dimensions = get_dimensions($dimension_list, $set_aws_instanceId)
+        $dimensions = get_dimensions($dimension_list, $set_aws_instanceRegion)
         
         $url        = "${signalfx_url}${dimensions}"
 
