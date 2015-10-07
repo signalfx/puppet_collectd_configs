@@ -10,7 +10,15 @@
 
 ## Overview
 
-The send_collectd_metrics module configures the write_http plugin of collectd to send your system metrics to SignalFx, a monitoring platform.
+The send_collectd_metrics module configures collectd's write_http plugin to send metrics to [SignalFx](http://signalfx.com).
+
+This is one of three modules provided by SignalFx for managing collectd. 
+
+Module name | Description 
+------------| ------------
+[puppet_install_collectd](https://forge.puppetlabs.com/signalfx/install_collectd) | Install and stay up-to-date with SignalFx's latest build of collectd. 
+[configure_collectd_plugins](https://forge.puppetlabs.com/signalfx/configure_collectd_plugins) | Enable and configure a set of collectd plugins that work well with SignalFx. 
+send_collectd_metrics | Configure collectd to send metrics to SignalFx. 
 
 ## Setup
 Install the latest release of send_collectd_metrics module from SignalFx using:
@@ -20,13 +28,13 @@ puppet module install signalfx/send_collectd_metrics
 
 ### What send_collectd_metrics affects
 
-The send_collectd_metrics module configures only the write_http plugin. It does not configure any other plugins.
+The send_collectd_metrics module configures collectd's write_http plugin to send metrics to SignalFx. You must have collectd installed in order to use this module. 
 
-It is recommended to include the [install_collectd](https://github.com/signalfx/puppet_install_collectd) and [configure_collectd_plugins](https://github.com/signalfx/puppet_configure_collectd_plugins) modules before this module if you don't have any existing collectd on your systems to get the latest collectd from SignalFx repositories.
+SignalFx provides additional modules to install collectd and configure data collection plugins. See [Overview](#overview). 
 
 ## Usage
 
-The send_collectd_metrics module accepts few parameters to configure the write_http plugin:
+The send_collectd_metrics module accepts parameters to configure the write_http plugin as follows:
 ```shell
 class {'send_collectd_metrics':
     api_token => "<YOUR-API-TOKEN>",
@@ -35,12 +43,12 @@ class {'send_collectd_metrics':
     signalfx_url => "https://ingest.signalfx.com/v1/collectd"
 }
 ```
- * In order to send data, insert your api-token. 
- * You can set custom dimensions on all of the metrics being sent by the collectd to SignalFx. This can be done by entering your custom dimensions into the dimension_list hash map.  
-   For example: If one of your servers is running kafka, you can attach a custom dimension into the hash map as:  
-   dimension_list => {"serverType" => "kafka"}
- * You can disable AWS metadata syncing for SignalFx by setting aws_integration to false.
- * You can also configure the target url if you choose to use a proxy to send metrics to SignalFx.
+Parameter name | Description |
+---------------|--------------
+api_token | Provide your SignalFx API token in this parameter to send data to SignalFx. 
+dimension_list | Use the dimension_list hash map to set custom dimensions on all of the metrics that collectd sends to SignalFx. For example, you can use a custom dimension to indicate that one of your servers is running Kafka by including it in the hash map as follows: `dimension_list => {"serverType" => "kafka"}`
+aws_integration | This parameter controls AWS metadata syncing to SignalFx. To disable AWS metadata syncing, set this parameter to false.
+signalfx_url | If you use a proxy to send metrics to SignalFx, replace this parameter with the URL of your proxy.
 
 
 
