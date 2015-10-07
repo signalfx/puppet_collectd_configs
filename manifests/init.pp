@@ -32,22 +32,22 @@ class send_collectd_metrics (
 
         # configure write_http plugin
         class { 'collectd::plugin::write_http':
-            urls      => {
-            "${url}"    => {
-                          'user'                       => 'auth',
-                          'password'                   => $api_token,
-                          'format'                     => 'JSON'
+            urls   => {
+            "${url}"          => {
+                          'user'     => 'auth',
+                          'password' => $api_token,
+                          'format'   => 'JSON'
             },
             },
-            notify    => Service['collectd'],
+            notify => Service['collectd'],
         }
         
         # configure signalfx plugin
         file { 'load Signalfx plugin':
           ensure  => present,
-          path    => "${conf_dir}/20-signalfx_plugin.conf",
+          path    => "${conf_dir}/10-signalfx.conf",
           owner   => root,
-          group   => $root_group,
+          group   => 'root',
           mode    => '0640',
           content => template('send_collectd_metrics/signalfx_plugin.conf.erb'),
           notify  => Service['collectd'],

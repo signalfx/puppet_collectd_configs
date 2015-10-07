@@ -29,9 +29,9 @@ class send_collectd_metrics::install_repo inherits send_collectd_metrics::repo_p
               }
               else {
                       package { $send_collectd_metrics::repo_params::repo_name:
-                              ensure      => latest,
-                              provider    => 'rpm',
-                              source      => $send_collectd_metrics::repo_params::repo_source
+                              ensure   => latest,
+                              provider => 'rpm',
+                              source   => $send_collectd_metrics::repo_params::repo_source
                       }
               }
           }
