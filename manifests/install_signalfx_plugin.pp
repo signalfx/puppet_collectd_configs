@@ -2,13 +2,10 @@
 
 class send_collectd_metrics::install_signalfx_plugin {
     
-    include 'send_collectd_metrics::install_repo'
     case $::osfamily {
             'Debian': {
-
                     package { 'signalfx-collectd-plugin':
                             ensure  => latest,
-                            require => Class['send_collectd_metrics::install_repo']
                     }
             }
 
@@ -19,7 +16,6 @@ class send_collectd_metrics::install_signalfx_plugin {
                     package { 'signalfx-collectd-plugin':
                             ensure   => latest,
                             provider => 'yum',
-                            require  => Class['send_collectd_metrics::install_repo']
                     }
             }
 

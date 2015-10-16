@@ -2,11 +2,11 @@
 # to send the system metrics to SignalFx
 #
 class send_collectd_metrics (
-
   $api_token                 = '', # (required parameter)
   $dimension_list            = {},
   $aws_integration           = true,
-  $signalfx_url              = 'https://ingest.signalfx.com/v1/collectd'
+  $signalfx_url              = 'https://ingest.signalfx.com/v1/collectd',
+  $ppa                       = 'ppa:signalfx/collectd-plugin-release'
 ) {
   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
     
@@ -18,13 +18,23 @@ class send_collectd_metrics (
               fail('Please insert a valid API token!')
         }
         Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
-    
+
         include 'collectd'
-        
+
         # Install signalfx plugin
-        include 'send_collectd_metrics::install_signalfx_plugin'
-        include collectd::params
-        $conf_dir = $collectd::params::plugin_conf_dir
+        class { 'send_collectd_metrics::install_plugin_repo':
+          ppa => $ppa
+        }
+        class { 'send_collectd_metrics::install_signalfx_plugin':
+          require => Class['send_collectd_metrics::install_plugin_repo']
+        }
+
+        if $::osfamily == 'Debian' {
+          $conf_dir = '/etc/collectd/conf.d'
+        }
+        elsif $::osfamily == 'Redhat' {
+          $conf_dir = '/etc/collectd.d'
+        }
 
         $dimensions = get_dimensions($dimension_list, $aws_integration)
         $url        = "${signalfx_url}${dimensions}"
@@ -32,14 +42,13 @@ class send_collectd_metrics (
 
         # configure write_http plugin
         class { 'collectd::plugin::write_http':
-            urls   => {
+            urls => {
             "${url}"          => {
                           'user'     => 'auth',
                           'password' => $api_token,
                           'format'   => 'JSON'
             },
             },
-            notify => Service['collectd'],
         }
         
         # configure signalfx plugin

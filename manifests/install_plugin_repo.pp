@@ -1,6 +1,8 @@
 # installs the SignalFx repositories on your system
 #
-class send_collectd_metrics::install_repo inherits send_collectd_metrics::repo_params {
+class send_collectd_metrics::install_plugin_repo (
+  $ppa,
+) inherits send_collectd_metrics::repo_params {
 
   case $::osfamily {
           'Debian': {
@@ -9,30 +11,19 @@ class send_collectd_metrics::install_repo inherits send_collectd_metrics::repo_p
                   # add-apt-repository command (after Ubuntu 13.10)
                   # python-software-properties is the source package for
                   # add-apt-repository command (before Ubuntu 13.10)
-                  command    => 'apt-get update &&
+                  command    => "apt-get update &&
                                  apt-get -y install software-properties-common &&
                                  apt-get -y install python-software-properties &&
-                                 add-apt-repository ppa:signalfx/collectd-plugin-release &&
-                                 apt-get update',
+                                 add-apt-repository ${ppa} &&
+                                 apt-get update",
               }
           }
 
           'Redhat':{
-
-              if $::operatingsystemmajrelease == '5' {
-                      exec { 'install SignalFx collectd plugin repo  on centos 5':
-                      command     => "yum -y install wget &&
-                                     wget ${send_collectd_metrics::repo_params::repo_source} &&
-                                     yum -y install --nogpgcheck ${send_collectd_metrics::repo_params::repo_name} &&
-                                     rm -f ${send_collectd_metrics::repo_params::repo_name}"
-                      }
-              }
-              else {
-                      package { $send_collectd_metrics::repo_params::repo_name:
-                              ensure   => latest,
-                              provider => 'rpm',
-                              source   => $send_collectd_metrics::repo_params::repo_source
-                      }
+              package { $send_collectd_metrics::repo_params::repo_name:
+                      ensure   => latest,
+                      provider => 'rpm',
+                      source   => $send_collectd_metrics::repo_params::repo_source
               }
           }
           default: {
