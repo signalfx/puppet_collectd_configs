@@ -19,7 +19,7 @@ class send_collectd_metrics (
         }
         Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
-        include 'collectd'
+        include 'install_collectd'
 
         # Install signalfx plugin
         class { 'send_collectd_metrics::install_plugin_repo':
