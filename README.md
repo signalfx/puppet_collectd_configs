@@ -37,11 +37,12 @@ SignalFx provides additional modules to install collectd and configure data coll
 The send_collectd_metrics module accepts parameters to configure the write_http plugin as follows:
 ```shell
 class {'send_collectd_metrics':
-    api_token => "<YOUR-API-TOKEN>",
-    dimension_list => {"key" => "value"},
+    api_token       => "<YOUR-API-TOKEN>",
+    dimension_list  => {"key" => "value"},
     aws_integration => true,
-    signalfx_url => "https://ingest.signalfx.com/v1/collectd",
-    ppa => "ppa:signalfx/collectd-plugin-release"
+    signalfx_url    => "https://ingest.signalfx.com/v1/collectd",
+    ensure          => present
+    ppa             => "ppa:signalfx/collectd-plugin-release"
 }
 ```
 Parameter name | Description |
@@ -50,6 +51,7 @@ api_token | Provide your SignalFx API token in this parameter to send data to Si
 dimension_list | Use the dimension_list hash map to set custom dimensions on all of the metrics that collectd sends to SignalFx. For example, you can use a custom dimension to indicate that one of your servers is running Kafka by including it in the hash map as follows: `dimension_list => {"serverType" => "kafka"}`
 aws_integration | This parameter controls AWS metadata syncing to SignalFx. To disable AWS metadata syncing, set this parameter to false.
 signalfx_url | If you use a proxy to send metrics to SignalFx, replace this parameter with the URL of your proxy.
+ensure | This parameter controls the version of signalfx plugin installation. You can specify "latest" if you want to update your plugin. You can also specify "\<version-number\>" to get the exact version from your local PPA.
 ppa | Change this value if you want to install the signalfx plugin from your local PPA.
 
 

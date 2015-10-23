@@ -6,6 +6,7 @@ class send_collectd_metrics (
   $dimension_list            = {},
   $aws_integration           = true,
   $signalfx_url              = 'https://ingest.signalfx.com/v1/collectd',
+  $ensure_plugin_version     = present,
   $ppa                       = 'ppa:signalfx/collectd-plugin-release'
 ) {
   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
@@ -22,11 +23,9 @@ class send_collectd_metrics (
         include 'install_collectd'
 
         # Install signalfx plugin
-        class { 'send_collectd_metrics::install_plugin_repo':
-          ppa => $ppa
-        }
         class { 'send_collectd_metrics::install_signalfx_plugin':
-          require => Class['send_collectd_metrics::install_plugin_repo']
+            ppa => $ppa,
+            ensure => $ensure_plugin_version
         }
 
         if $::osfamily == 'Debian' {
@@ -62,6 +61,5 @@ class send_collectd_metrics (
           notify  => Service['collectd'],
           require => Class['send_collectd_metrics::install_signalfx_plugin']
         }
-
   }
 }
