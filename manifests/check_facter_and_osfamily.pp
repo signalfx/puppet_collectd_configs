@@ -1,4 +1,4 @@
-define check_facter_version {
+define send_collectd_metrics::check_facter_and_osfamily {
 
   # check for the older facter version
   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {

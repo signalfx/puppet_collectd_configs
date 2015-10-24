@@ -1,9 +1,10 @@
 # Install signalfx collectd plugin
 
-define send_collectd_metrics::install_signalfx_plugin {
+define send_collectd_metrics::install_and_configure_signalfx_plugin {
   case $::osfamily {
     'Debian': {
       # Add apt-repository key
+      $ppa = "abcd"
       if !('ppa:signalfx' in $ppa) {
         exec { 'add apt-key':
           command => 'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68EA6297FE128AB0',
