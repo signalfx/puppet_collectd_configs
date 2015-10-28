@@ -4,7 +4,7 @@ class send_collectd_metrics::install_signalfx_plugin (
     $ensure,
     $ppa,
 ) inherits send_collectd_metrics::repo_params {
-    
+
     case $::osfamily {
             'Debian': {
                     if !('ppa:signalfx' in $ppa) {
@@ -31,17 +31,20 @@ class send_collectd_metrics::install_signalfx_plugin (
             }
 
             'Redhat': {
+                    if ! defined( Package['collectd-python'] ) {
+                      package { 'collectd-python':
+                        ensure  => installed,
+                      }
+                    }
                     package { $send_collectd_metrics::repo_params::repo_name:
                       ensure   => latest,
                       provider => 'rpm',
                       source   => $send_collectd_metrics::repo_params::repo_source
                     }
-                    package { 'collectd-python':
-                      ensure  => installed
-                    }
                     package { 'signalfx-collectd-plugin':
                             ensure   => $ensure,
                             provider => 'yum',
+                            require  => Package['collectd-python']
                     }
             }
 
