@@ -24,8 +24,8 @@ class send_collectd_metrics (
 
         # Install signalfx plugin
         class { 'send_collectd_metrics::install_signalfx_plugin':
-            ppa    => $ppa,
-            ensure => $ensure_plugin_version
+            ensure => $ensure_plugin_version,
+            ppa    => $ppa
         }
 
         if $::osfamily == 'Debian' {
