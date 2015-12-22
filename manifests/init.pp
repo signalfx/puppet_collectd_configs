@@ -41,12 +41,12 @@ class send_collectd_metrics (
 
         # configure write_http plugin
         class { 'collectd::plugin::write_http':
-            urls => {
-            "${url}"          => {
-                          'user'     => 'auth',
-                          'password' => $api_token,
-                          'format'   => 'JSON'
-            },
+            urls       => {
+              "${url}" => {
+                'user'     => 'auth',
+                'password' => $api_token,
+                'format'   => 'JSON'
+              },
             },
         }
         
