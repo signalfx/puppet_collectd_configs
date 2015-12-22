@@ -41,7 +41,7 @@ class {'send_collectd_metrics':
     dimension_list  => {"key" => "value"},
     aws_integration => true,
     signalfx_url    => "https://ingest.signalfx.com/v1/collectd",
-    ensure          => present
+    ensure          => present,
     ppa             => "ppa:signalfx/collectd-plugin-release"
 }
 ```
