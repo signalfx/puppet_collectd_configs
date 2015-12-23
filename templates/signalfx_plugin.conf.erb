@@ -6,7 +6,7 @@ LoadPlugin python
   Import "signalfx_metadata"
   <Module signalfx_metadata>
     Notifications true
-    URL "<%= @url %>"
+    URL "<%= @signalfx_url_with_dimensions %>"
     Token "<%= @api_token %>"
     NotifyLevel "OKAY"
   </Module>
