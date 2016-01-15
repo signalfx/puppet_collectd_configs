@@ -2,12 +2,14 @@
 # to send the system metrics to SignalFx
 #
 class send_collectd_metrics (
-  $api_token                 = '', # (required parameter)
+  $api_token,
   $dimension_list            = {},
   $aws_integration           = true,
   $signalfx_url              = 'https://ingest.signalfx.com/v1/collectd',
+  $write_http_timeout        = 3000,
+  $write_http_buffersize     = 4096,
   $ensure_plugin_version     = present,
-  $ppa                       = 'ppa:signalfx/collectd-plugin-release'
+  $ppa                       = 'ppa:signalfx/collectd-plugin-release',
 ) {
   if versioncmp($::facterversion, '1.6.18') <= 0 and $::operatingsystem == 'Amazon' {
     
@@ -15,18 +17,9 @@ class send_collectd_metrics (
   
   }else {
   
-        if $api_token == '' {
-              fail('Please insert a valid API token!')
-        }
         Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
         include 'install_collectd'
-
-        # Install signalfx plugin
-        class { 'send_collectd_metrics::install_signalfx_plugin':
-            ensure => $ensure_plugin_version,
-            ppa    => $ppa
-        }
 
         if $::osfamily == 'Debian' {
           $conf_dir = '/etc/collectd/conf.d'
@@ -35,21 +28,32 @@ class send_collectd_metrics (
           $conf_dir = '/etc/collectd.d'
         }
 
+        # Install signalfx plugin
+        class { 'send_collectd_metrics::install_signalfx_plugin':
+            ensure => $ensure_plugin_version,
+            ppa    => $ppa
+        }
+
         $dimensions = get_dimensions($dimension_list, $aws_integration)
-        $url        = "${signalfx_url}${dimensions}"
-        notify {"Collectd will transmit metrics to this url: ${url}":}
+        $signalfx_url_with_dimensions = "${signalfx_url}${dimensions}"
+        notify {"Collectd will transmit metrics to this url: ${signalfx_url_with_dimensions}":}
 
         # configure write_http plugin
-        class { 'collectd::plugin::write_http':
-            urls => {
-            "${url}"          => {
-                          'user'     => 'auth',
-                          'password' => $api_token,
-                          'format'   => 'JSON'
-            },
-            },
+        validate_integer($write_http_timeout)
+        validate_integer($write_http_buffersize)
+        $write_http_user = 'auth'
+        $write_http_format = 'JSON'
+        file { 'load write_http plugin':
+          ensure  => present,
+          path    => "${conf_dir}/10-write_http.conf",
+          owner   => root,
+          group   => 'root',
+          mode    => '0640',
+          content => template('send_collectd_metrics/write_http.conf.erb'),
+          notify  => Service['collectd'],
+          require => Class['send_collectd_metrics::install_signalfx_plugin']
         }
-        
+
         # configure signalfx plugin
         file { 'load Signalfx plugin':
           ensure  => present,
@@ -63,3 +67,4 @@ class send_collectd_metrics (
         }
   }
 }
+

@@ -1,0 +1,12 @@
+LoadPlugin write_http
+<Plugin "write_http">
+    <Node "signalfx">
+        URL "<%= @signalfx_url_with_dimensions %>"
+        User "<%= @write_http_user %>"
+        Password "<%= @api_token %>"
+        Format "<%= @write_http_format %>"
+        Timeout <%= @write_http_timeout %>
+        BufferSize <%= @write_http_buffersize %>
+    </Node>
+</Plugin>
+
