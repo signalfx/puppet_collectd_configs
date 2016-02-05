@@ -45,19 +45,20 @@ class {'send_collectd_metrics':
     write_http_buffersize => 4096,
     ensure_plugin_version => present,
     ppa                   => "ppa:signalfx/collectd-plugin-release",
+    debian_ppa            => "deb https://dl.signalfx.com/debs/signalfx-collectd-plugin/jessie/release /",
 }
 ```
 Parameter name | Description |
 ---------------|--------------
 api_token | Provide your SignalFx API token in this parameter to send data to SignalFx. 
 dimension_list | Use the dimension_list hash map to set custom dimensions on all of the metrics that collectd sends to SignalFx. For example, you can use a custom dimension to indicate that one of your servers is running Kafka by including it in the hash map as follows: `dimension_list => {"serverType" => "kafka"}`
-aws_integration | This parameter controls AWS metadata syncing to SignalFx. To disable AWS metadata syncing, set this parameter to false.
+aws_integration | This parameter controls AWS metadata syncing to SignalFx. Default is true. To disable AWS metadata syncing, set this parameter to false.
 signalfx_url | If you use a proxy to send metrics to SignalFx, replace this parameter with the URL of your proxy.
-write_http_timeout | sets Timeout option of write_http plugin of collectd.
-write_http_buffersize | sets BufferSize option of write_http plugin of collectd.
-ensure_plugin_version | This parameter controls the version of signalfx plugin installation. You can specify "latest" if you want to update your plugin. You can also specify "\<version-number\>" to get the exact version from your local PPA.
-ppa | Change this value if you want to install the signalfx plugin from your local PPA.
-
+write_http_timeout | sets Timeout option of write_http plugin of collectd. Default value is 3000.
+write_http_buffersize | sets BufferSize option of write_http plugin of collectd. Default value is 4096.
+ensure_plugin_version | This parameter controls the version of signalfx plugin installation. You can specify "latest" if you want to update your plugin. You can also specify "\<version-number\>" to get the exact version from your local PPA. Default value is present.
+ppa | Change this value if you want to install the signalfx plugin from your local PPA. Applies only to Ubuntu systems. Default value is appropriate up-to-date ppa hosted by SignalFx.
+debian_ppa | Change this value if you want to install the signalfx plugin from your local PPA. Applies only to Debian GNU/Linux 7 and 8 systems. Default value is appropriate up-to-date ppa hosted by SignalFx.
 
 
 

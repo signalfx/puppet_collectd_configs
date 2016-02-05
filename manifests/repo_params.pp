@@ -2,7 +2,22 @@
 
 class send_collectd_metrics::repo_params {
         case $::operatingsystem {
-                'Ubuntu':{}
+                'Ubuntu': {}
+                'Debian':{
+                        case $::operatingsystemmajrelease {
+                                '7': {
+                                      $signalfx_public_keyid = '185894C15AE495F6'
+                                      $repo_source           = 'deb https://dl.signalfx.com/debs/signalfx-collectd-plugin/wheezy/release /'
+                                }
+                                '8': {
+                                      $signalfx_public_keyid = '185894C15AE495F6'
+                                      $repo_source           = 'deb https://dl.signalfx.com/debs/signalfx-collectd-plugin/jessie/release /'
+                                }
+                                default: {
+                                        fail("Your Debian OS major release : ${::operatingsystemmajrelease} is not supported.")
+                                }
+                        }
+                }
                 'CentOS': {
                         case $::operatingsystemmajrelease {
                                 '7': {
