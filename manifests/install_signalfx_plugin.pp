@@ -50,6 +50,7 @@ class send_collectd_metrics::install_signalfx_plugin (
                     if ! defined( Package['collectd-python'] ) {
                       package { 'collectd-python':
                         ensure  => installed,
+                        require => Package[$install_collectd::repo_params::repo_name]
                       }
                     }
                     package { $send_collectd_metrics::repo_params::repo_name:
@@ -60,7 +61,7 @@ class send_collectd_metrics::install_signalfx_plugin (
                     package { 'signalfx-collectd-plugin':
                             ensure   => $ensure,
                             provider => 'yum',
-                            require  => Package['collectd-python']
+                            require  => Package['collectd-python', $send_collectd_metrics::repo_params::repo_name]
                     }
             }
 
