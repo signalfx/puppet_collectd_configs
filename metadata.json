@@ -1,6 +1,6 @@
 {
   "name": "signalfx-send_collectd_metrics",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "author": "Uday Sagar Shiramshetty",
   "summary": "A puppet module that configures write_http plugin of collectd to send the system metrics to SignalFx",
   "license": "Apache-2.0",
@@ -8,6 +8,13 @@
   "project_page": "https://github.com/signalfx/puppet_send_collectd_metrics",
   "issues_url": "https://github.com/signalfx/puppet_send_collectd_metrics/issues",
   "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
     {
       "operatingsystem": "Amazon",
       "operatingsystemrelease": [
