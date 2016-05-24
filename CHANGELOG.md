@@ -1,3 +1,6 @@
+Release 0.1.11
+  * Set deprecation warning
+
 Release 0.1.10
 
   * Add CHANGELOG to the module
